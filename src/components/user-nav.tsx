@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Avatar,
   AvatarFallback,
@@ -14,24 +16,35 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { useUser, SignOutButton } from "@clerk/nextjs"
 
 export function UserNav() {
+  const { user } = useUser();
+  
+  if (!user) {
+    return null;
+  }
+
+  const userInitials = user.firstName && user.lastName 
+    ? `${user.firstName[0]}${user.lastName[0]}` 
+    : user.emailAddresses[0]?.emailAddress[0] || 'U';
+  
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
-            <AvatarImage src="/assets/placeholder-user.jpg" alt="@user" />
-            <AvatarFallback>SC</AvatarFallback>
+            <AvatarImage src={user.imageUrl} alt={user.fullName || 'User'} />
+            <AvatarFallback>{userInitials}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">Dave Kearney</p>
+            <p className="text-sm font-medium leading-none">{user.fullName}</p>
             <p className="text-xs leading-none text-muted-foreground">
-              dave@brandium.cc
+              {user.primaryEmailAddress?.emailAddress}
             </p>
           </div>
         </DropdownMenuLabel>
@@ -51,10 +64,12 @@ export function UserNav() {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          Log out
-          <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-        </DropdownMenuItem>
+        <SignOutButton>
+          <DropdownMenuItem>
+            Log out
+            <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+          </DropdownMenuItem>
+        </SignOutButton>
       </DropdownMenuContent>
     </DropdownMenu>
   )
