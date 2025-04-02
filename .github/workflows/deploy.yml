@@ -27,11 +27,14 @@ jobs:
       - name: Build
         run: npm run build
         
+      - name: Install Supabase CLI
+        run: npm install -g supabase
+        
+      - name: Login to Supabase
+        run: supabase login --non-interactive --token ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        
       - name: Deploy to Supabase
-        uses: supabase/supabase-github-actions/deploy@v1
-        with:
-          project-ref: ${{ secrets.SUPABASE_PROJECT_REF }}
-          access-token: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-          
+        run: supabase functions deploy --project-ref ${{ secrets.SUPABASE_PROJECT_REF }}
+        
       - name: Verify Deployment
         run: echo "Deployment completed successfully"
