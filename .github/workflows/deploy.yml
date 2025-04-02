@@ -28,7 +28,7 @@ jobs:
         run: npm run build
         
       - name: Deploy to Supabase
-        uses: supabase/actions/deploy@v1
+        uses: supabase/supabase-github-actions/deploy@v1
         with:
           project-ref: ${{ secrets.SUPABASE_PROJECT_REF }}
           access-token: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
