@@ -37,4 +37,4 @@ jobs:
         run: supabase functions deploy --project-ref ${{ secrets.SUPABASE_PROJECT_REF }}
         
       - name: Verify Deployment
-        run: echo "Deployment completed successfully"
+        run: echo "Deployment completed successfully" 
