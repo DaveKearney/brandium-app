@@ -1,5 +1,4 @@
 import { createClient } from '@supabase/supabase-js'
-import { NextResponse } from 'next/server'
 import { redirect } from 'next/navigation'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
@@ -11,12 +10,13 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
-export function checkAuth() {
+export async function checkAuth() {
   // Get auth data
   console.log("Checking Auth");
-  const { data: { session } } = supabase.auth.getSession()
+  const { data: { session } } = await supabase.auth.getSession()
   
   // If no session, redirect to login
+  // TODO: switch this to default redirect for greater security. 
   if (!session) {
     redirect("/login")
   }
