@@ -25,7 +25,11 @@ export default function LoginPage() {
       // Redirect to dashboard after successful login
       window.location.href = "/dashboard";
     } catch (error) {
-      setError(error.message);
+        if (error instanceof Error) {
+          setError(error.message);
+        } else {
+          setError('An unknown error occurred');
+        }
     }
   };
 
